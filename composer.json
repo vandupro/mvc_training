@@ -1,0 +1,12 @@
+{
+    "name": "mvc/vandu",
+    "type": "library",
+
+    "require": {},
+
+    "autoload": {
+        "psr-4": {
+            "MVC_TRAINING\\": "src/"
+        }
+    }
+}
