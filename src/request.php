@@ -7,8 +7,7 @@ class  Request
 
     public function __construct()
     {
-        if(isset($_GET['url']))
-        {
+        if(isset($_GET['url'])) {
             $this->url = $_GET['url'];
         } else {
             $this->url = '/';

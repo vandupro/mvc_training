@@ -13,13 +13,15 @@ class Dispatcher
     function __construct()
     {
         $this->request = new Request();
-
-
         Router::parse($this->request->url, $this->request);
-        // echo'<pre>';
-        // var_dump($this->loadController());
+        $controller = $this->loadController();
 
+        if(!method_exists($controller, $this->request->action)) {
+            //$controller = new ErrorController();
+            $this->request->action = 'index';
+        }
         
+        call_user_func_array([$controller, $this->request->action], $this->request->params);
     }
 
     public function loadController()
@@ -28,7 +30,7 @@ class Dispatcher
         $nameController = 'MVC_TRAINING\\Controllers\\' .$name;
 
         if(!class_exists($nameController)) {
-            return new ErrorController;
+            $nameController = 'MVC_TRAINING\\Controllers\\' . 'ErrorController';
         }
         
         return new $nameController;   
