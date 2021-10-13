@@ -19,7 +19,7 @@ class TaskController extends Controller
         $this->render("index");
     }
 
-    public function creat() {
+    public function create() {
         $this->render("create");
     }
 
@@ -32,10 +32,11 @@ class TaskController extends Controller
             if(isset($data['id'])) {
                 $model = $this->tasks->getId($data['id']);
             } 
-            
+            // echo '<pre>';
+            // var_dump($data);die;
             $model->setTitle($data['title']);
             $model->setDesc($data['description']);
-
+            $model->setCreated_at($data['created_at']);
             $this->tasks->add($model);
             header("Location: " . WEBROOT . "task/index");
             

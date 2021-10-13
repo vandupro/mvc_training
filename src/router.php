@@ -7,7 +7,7 @@ class Router
     public static function parse($url, $request)
     {
         $url = trim($url);
-        $request->controller = "Task";
+        $request->controller = "task";
         $request->action = "index";
         $request->params = [];
         $explode_url = explode('/', $url);

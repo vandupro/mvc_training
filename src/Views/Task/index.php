@@ -1,6 +1,6 @@
 <h1>Danh sách Task</h1>
 <div style="text-align:left; margin: 10px 0;">
-    <a class="btn btn-primary" href="<?=WEBROOT?>task/creat">Thêm mới</a>
+    <a class="btn btn-primary" href="<?=WEBROOT?>task/create">Thêm mới</a>
 </div>
 <table class="table table-striped">
     <thead>

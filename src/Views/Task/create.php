@@ -1,5 +1,6 @@
 <h1>Thêm mới Task</h1>
 <form action="<?=WEBROOT?>task/store" method="post">
+    <input name="created_at" type="hidden" value="<?=date("Y-m-d h:i:sa")?>">
     <div class="form-group">
         <label for="title">Tên Task</label>
         <input class="form-control" type="text" id="title" name="title">

@@ -95,7 +95,6 @@ class ResourceModel extends Model implements ResourceModelInterface
         } else {
             $sql = "UPDATE $this->table SET $stringModel WHERE $this->id = $id";
         }
-
         $req = Database::getBdd()->prepare($sql);
         return $req->execute($arrayModel);
     }

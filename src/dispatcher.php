@@ -16,8 +16,10 @@ class Dispatcher
         Router::parse($this->request->url, $this->request);
         $controller = $this->loadController();
 
+        // echo '<pre>';
+        // var_dump($controller);die;
+
         if(!method_exists($controller, $this->request->action)) {
-            //$controller = new ErrorController();
             $this->request->action = 'index';
         }
         
@@ -26,7 +28,7 @@ class Dispatcher
 
     public function loadController()
     {
-        $name = $this->request->controller . "Controller";
+        $name = ucfirst($this->request->controller) . "Controller";
         $nameController = 'MVC_TRAINING\\Controllers\\' .$name;
 
         if(!class_exists($nameController)) {
