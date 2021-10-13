@@ -1,4 +1,5 @@
 <?php
+
 namespace MVC_TRAINING\Core;
 
 use MVC_TRAINING\Config\Database;
@@ -24,28 +25,61 @@ class ResourceModel extends Model implements ResourceModelInterface
         return ($req->fetchAll(PDO::FETCH_CLASS, get_class($this->model)));
     }
 
-    public function get($id) {
+    public function getId($id) {
         $sql = "SELECT * FROM $this->table WHERE $this->id = $id";
         $req = Database::getBdd()->prepare($sql);
         $req->execute();
         return ($req->fetchObject(get_class($this->model)));
     }
 
+    public function execute() {
+        $stmt = Database::getBdd()->prepare($this->queryBuilder);
+        return $stmt->execute();
+    }
+
     public function delete($id) {
-        $sql = "DELETE * FROM $this->table WHERE $this->id = $id";
-        $req = Database::getBdd()->prepare($sql);
-        return $req->execute();
+        $model = new static();
+        $model->queryBuilder = "DELETE FROM $this->table WHERE $this->id = $id";
+        return $model->execute();
+    }
+
+    public static function where($arr)
+    {
+        $model = new static();
+        $model->queryBuilder = "select * from $model->table where $arr[0] $arr[1] '$arr[2]'";
+        return $model;
+    }
+
+    public function andWhere($arr)
+    {
+        $this->queryBuilder .= " and $arr[0] $arr[1] '$arr[2]'";
+        return $this;
+    }
+
+    public function orWhere($arr)
+    {
+        $this->queryBuilder .= " or $arr[0] $arr[1] '$arr[2]'";
+        return $this;
+    }
+
+    public function orderBy($col, $asc = true)
+    {
+        $this->queryBuilder .= " ORDER BY $col";
+        $this->queryBuilder .= $asc == true ? " asc " : " desc ";
+        return $this;
+    }
+
+    public function get()
+    {   
+        $stmt = Database::getBdd()->prepare($this->queryBuilder);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_CLASS, get_class($this->model));
+        return $result;
     }
 
     public function save($model) {
-        $arrayModel = get_object_vars($model);
-        $id = $arrayModel[$this->id];
-        // $arrayModel = [
-        //     'id'=>'null',
-        //     'title'=>'This is title',
-        //     'name'=>'This is name',
-        // ];
-
+        $arrayModel = $model->getProperties();
+        $id = isset($arrayModel[$this->id]) ? $arrayModel[$this->id] : null;
         $keyModel = array_keys($arrayModel);
         $arr = [];
 
@@ -54,22 +88,17 @@ class ResourceModel extends Model implements ResourceModelInterface
             $arr[] = $value;
         }
         
-        $stringModel = implode(',', $arr);
+        $stringModel = implode(', ', $arr);
 
-        if($arrayModel[$this->id] == null) {
+        if($id == null) {
             $sql = "INSERT INTO $this->table SET $stringModel";
         } else {
-            $sql = "UPDATE INTO $this->table SET $stringModel WHER $this->id = $id";
+            $sql = "UPDATE $this->table SET $stringModel WHERE $this->id = $id";
         }
 
         $req = Database::getBdd()->prepare($sql);
         return $req->execute($arrayModel);
-
-        // echo '<pre>';
-        // var_dump($stringModel);
     }
-
-    
 }
 
 ?>

@@ -1,8 +1,8 @@
 <?php
+
 namespace MVC_TRAINING\Models\Task;
 
 use MVC_TRAINING\Models\Task\TaskResourceModel;
-use MVC_TRAINING\Models\Task\TaskModel;
 
 class TaskRepository
 {
@@ -11,21 +11,15 @@ class TaskRepository
     public function __construct()
     {
         $this->task = new TaskResourceModel();
-        
     }
 
     public function getAll() {
-        //return $this->task->getAll();
-        $arr = [];
-        foreach($this->task->getAll() as $key => $value) {
-            $arr[] = $value->getProperties($value);
-        }
-        return $arr;
+        return $this->task->getAll();
     }
 
     public function getId($id) {
-        $model = $this->task->get($id);
-        return $model->getProperties($model);
+        $model = $this->task->getId($id);
+        return $model;
     }
 
     public function add($model) {
@@ -34,6 +28,27 @@ class TaskRepository
 
     public function delete($id) {
         $this->task->delete($id);
+    }
+
+    public function where($arr) {
+        return TaskResourceModel::where($arr);
+    }
+
+    public function andWhere($arr) {
+        return $this->task->andWhere($arr);
+    }
+
+    public function orderBy($col, $asc)
+    {
+        return $this->task->orderBy($col, $asc);
+    }
+
+    public function orWhere($arr) {
+        return $this->task->orWhere($arr);
+    }
+
+    public function get() {
+        return $this->task->get();
     }
 }
 

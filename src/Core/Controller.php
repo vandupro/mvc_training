@@ -1,4 +1,5 @@
 <?php
+
 namespace MVC_TRAINING\Core;
 
 class Controller
@@ -39,6 +40,18 @@ class Controller
         foreach ($form as $key => $value) {
             $form[$key] = $this->secure_input($value);
         }
+
+        return $form;
+    }
+    
+    public function getData($data){
+        $arr = [];
+
+        foreach($data as $key => $value) {
+            $arr[] = $value->getProperties($value);
+        }
+
+        return $arr;
     }
 
 }
